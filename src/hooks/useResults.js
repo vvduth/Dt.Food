@@ -25,7 +25,7 @@ export default () => {
     //call search api when components firt rendered
 
     useEffect(()=> {
-        searchApi('pasta');
+        searchApi('fish');
     },[]);
 
     return [searchApi,results,errorMessage];

@@ -1,31 +1,21 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import SearchBar from '../components/SearchBar';
-import yelp from '../api/yelp';
+import useResults from '../hooks/useResults';
 
 const SearchScreen = () => {
 
     const[term, setTerm] = useState('');
-    const[results, setResult] = useState([]);
-
-    const searchApi = async () => {
-        const response = await yelp.get('/search',{
-            params:{
-                limit: 50 ,//read the document for more infomation
-                term,
-                location: 'san jose'
-            }
-        });
-        setResult(response.data.businesses);
-    };
+    const[searchApi, results, errorMessage] = useResults();
+    
 
     return (<View>
         <SearchBar 
             term ={term} 
             onTermChange={newTerm => setTerm(newTerm)}
-            onTermSubmit = {()=> searchApi()}
+            onTermSubmit = {()=> searchApi(term)}
         />
-        <Text>Seach Screen.</Text>
+        {errorMessage ? <Text>{errorMessage}</Text> : null}
         <Text>We found {results.length} results</Text>
     </View>)
 };
@@ -36,3 +26,5 @@ const styles = StyleSheet.create({});
 export default SearchScreen ;
 
 //use either fetch or anxios to take data from API
+//use effect hook: to run the function only when the component is first rendered, and when the 
+//value changes, useEffect have 2 argument, one is a function and one is an array
